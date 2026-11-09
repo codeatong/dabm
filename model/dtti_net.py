@@ -7,14 +7,14 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-def _group_count(num_channels):
+def group_count(num_channels):
     for group_count in (8, 4, 2):
         if num_channels % group_count == 0:
             return group_count
     return 1
 
 
-def _validate_positive_sequence(values, name):
+def validate_positive_sequence(values, name):
     values = tuple(int(value) for value in values)
     if not values or any(value <= 0 for value in values):
         raise ValueError(name + " must contain positive integers.")
@@ -164,7 +164,7 @@ class DTTIBlock(nn.Module):
         )
         self.dropout = nn.Dropout2d(dropout)
         self.normalization = nn.GroupNorm(
-            _group_count(out_channels),
+            group_count(out_channels),
             out_channels,
         )
         self.register_buffer(
@@ -173,7 +173,7 @@ class DTTIBlock(nn.Module):
         )
         self.adaptive_router = bool(adaptive_router)
 
-    def _routing_weights(self, routing_logits):
+    def routing_weights(self, routing_logits):
         active_mask = self.active_path_mask.view(1, 3, 1, 1)
         if self.adaptive_router:
             minimum = torch.finfo(routing_logits.dtype).min
@@ -207,7 +207,7 @@ class DTTIBlock(nn.Module):
                 dim=1,
             )
         )
-        routing_weights = self._routing_weights(routing_logits)
+        routing_weights = self.routing_weights(routing_logits)
         fused = (
             routing_weights.unsqueeze(2) * responses
         ).sum(dim=1)
@@ -245,19 +245,10 @@ class DualTopologyTemporalInteractionNetwork(nn.Module):
         adaptive_router=True,
     ):
         super().__init__()
-        channels = _validate_positive_sequence(channels, "channels")
-        chronological_dilations = _validate_positive_sequence(
-            chronological_dilations,
-            "chronological_dilations",
-        )
-        periodic_dilations = _validate_positive_sequence(
-            periodic_dilations,
-            "periodic_dilations",
-        )
-        pooled_size = _validate_positive_sequence(
-            pooled_size,
-            "pooled_size",
-        )
+        channels = validate_positive_sequence(channels, "channels")
+        chronological_dilations = validate_positive_sequence(chronological_dilations, "chronological_dilations")
+        periodic_dilations = validate_positive_sequence(periodic_dilations, "periodic_dilations")
+        pooled_size = validate_positive_sequence(pooled_size, "pooled_size")
         if len(pooled_size) != 2:
             raise ValueError("pooled_size must contain two integers.")
         if not (
@@ -278,7 +269,7 @@ class DualTopologyTemporalInteractionNetwork(nn.Module):
                 kernel_size=1,
                 bias=False,
             ),
-            nn.GroupNorm(_group_count(channels[0]), channels[0]),
+            nn.GroupNorm(group_count(channels[0]), channels[0]),
             nn.ReLU(inplace=False),
         )
 

@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 
 
-def _robust_location_scale(values, eps=1e-6):
+def robust_location_scale(values, eps=1e-6):
     """
     Calculate median and robust scale for a one-dimensional array.
     """
@@ -107,10 +107,7 @@ def fit_dsff_statistics(
                 np.clip(values, 0.0, None)
             )
 
-            center, scale = _robust_location_scale(
-                values,
-                eps=eps,
-            )
+            center, scale = robust_location_scale(values, eps=eps)
 
             temporal_center[
                 feature_index, hour_index
@@ -134,10 +131,7 @@ def fit_dsff_statistics(
     )
 
     for feature_index in range(num_global_features):
-        center, scale = _robust_location_scale(
-            train_global[:, feature_index],
-            eps=eps,
-        )
+        center, scale = robust_location_scale(train_global[:, feature_index], eps=eps)
 
         global_center[feature_index] = center
         global_scale[feature_index] = scale
@@ -150,7 +144,7 @@ def fit_dsff_statistics(
     }
 
 
-def _get_group_count(num_channels):
+def get_group_count(num_channels):
     """
     Select a valid group count for GroupNorm.
     """
@@ -186,12 +180,8 @@ class SharedTemporalEncoder(nn.Module):
     ):
         super().__init__()
 
-        hidden_groups = _get_group_count(
-            hidden_channels
-        )
-        output_groups = _get_group_count(
-            output_channels
-        )
+        hidden_groups = get_group_count(hidden_channels)
+        output_groups = get_group_count(output_channels)
 
         self.feature_extractor = nn.Sequential(
             nn.Conv2d(
@@ -469,7 +459,7 @@ class DualScaleFeatureFusion(nn.Module):
             ),
         )
 
-    def _normalize_temporal_features(
+    def normalize_temporal_features(
         self,
         temporal_data,
     ):
@@ -504,7 +494,7 @@ class DualScaleFeatureFusion(nn.Module):
 
         return normalized_temporal
 
-    def _normalize_global_features(
+    def normalize_global_features(
         self,
         global_data,
     ):
@@ -579,16 +569,12 @@ class DualScaleFeatureFusion(nn.Module):
             )
 
         normalized_temporal = (
-            self._normalize_temporal_features(
-                temporal_data
-            )
+            self.normalize_temporal_features(temporal_data)
         )
         # [B, K, H, D]
 
         normalized_global = (
-            self._normalize_global_features(
-                global_data
-            )
+            self.normalize_global_features(global_data)
         )
         # [B, P]
 
