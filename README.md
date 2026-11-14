@@ -47,10 +47,12 @@ python -m dabm.data_process
 If you already have both generated files in `dataset/`, go directly to training.
 
 ### 3. Train and evaluate
+Execute the following command to train the model, and you will obtain the final result. 
+The parameter settings have been provided in the article. 
+You can also adjust the parameters and re-train the model.
 
-Run the 80/20 telecom experiment with seed 42. The trainer evaluates the
-final checkpoint on the held-out test users automatically.
-
+<!--Run the 80/20 telecom experiment with seed 42. The trainer evaluates the
+final checkpoint on the held-out test users automatically. -->
 <!--python -m dabm.train_dabm_net \
   --temporal-path dataset/calendar_temporal_tensor.npy \
   --metadata-path dataset/calendar_metadata.npz \
@@ -65,11 +67,11 @@ python train_dabm_net.py \
   --batch-size 16 
 ```
 
-The default training schedule is 40 epochs. Use `--device cpu` on a CPU-only
-machine.
-
 ### 4. View the results
+The result after running will be saved in the specified path (if specified), 
+and a corresponding csv file will be generated.
 
-Open `runs/seed_42/comparison_summary.csv` for the test metrics. The
+<!--Open `runs/seed_42/comparison_summary.csv` for the test metrics. The
 `runs/seed_42/train_80_test_20_aug_12000_tta_3/` directory contains
 `final_model.pt`, `split_indices.npz`, and `test_predictions.csv`.
+-->
