@@ -57,7 +57,7 @@ final checkpoint on the held-out test users automatically.
 python train_dabm_net.py \
   --protocol train80 \
   --epochs 500 \
-  --batch-size 16 \
+  --batch-size 16 
 ```
 
 The default training schedule is 40 epochs. Use `--device cpu` on a CPU-only
