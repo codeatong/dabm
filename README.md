@@ -34,9 +34,11 @@ Place `voc_merge_all.csv` (calls), `train_sms.csv` (SMS), and
 `all_feat_new.csv` (user features and labels) in `dataset/`.
 
 ```bash
-python -m dabm.data_process \
+<!--python -m dabm.data_process \
   --temporal-output dataset/calendar_temporal_tensor.npy \
-  --metadata-output dataset/calendar_metadata.npz
+  --metadata-output dataset/calendar_metadata.npz -->
+
+python -m dabm.data_process 
 ```
 
 If you already have both generated files in `dataset/`, go directly to training.
@@ -47,13 +49,14 @@ Run the 80/20 telecom experiment with seed 42. The trainer evaluates the
 final checkpoint on the held-out test users automatically.
 
 ```bash
-#python -m dabm.train_dabm_net \
-#  --temporal-path dataset/calendar_temporal_tensor.npy \
-#  --metadata-path dataset/calendar_metadata.npz \
-#  --protocol train80 --seed 42 --split-seed 42 \
-#  --target-training-instances 12000 --test-time-views 3 \
-#  --device cuda --output-dir runs/seed_42
-
+<!--python -m dabm.train_dabm_net \
+  --temporal-path dataset/calendar_temporal_tensor.npy \
+  --metadata-path dataset/calendar_metadata.npz \
+  --protocol train80 --seed 42 --split-seed 42 \
+  --target-training-instances 12000 --test-time-views 3 \
+  --device cuda --output-dir runs/seed_42 
+  -->
+  
 python train_dabm_net.py \
   --protocol train80 \
   --epochs 500 \
