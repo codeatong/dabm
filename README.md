@@ -18,21 +18,22 @@ to estimate each user's fraud probability.
 Run the commands from the repository root.
 
 ### 1. Install dependencies
-
+<!--
 Use Python 3.8.19.
-
-```bash
 python3.8 -m venv .venv
 source .venv/bin/activate
+-->
+```bash
 python -m pip install -r requirements.txt
 ```
 
 ### 2. Prepare the data
+Use the dataset files in the `dataset/` directory and then run the code for data processing.
+If the dataset can notdownload, please contact the corresponding author for authorized access to the complete data. 
 
-Contact the corresponding author for authorized access to the complete data.
-Place `voc_merge_all.csv` (calls), `train_sms.csv` (SMS), and
+<!--Place `voc_merge_all.csv` (calls), `train_sms.csv` (SMS), and
 `all_feat_new.csv` (user features and labels) in `dataset/`.
-
+-->
 <!--
 python -m dabm.data_process \
   --temporal-output dataset/calendar_temporal_tensor.npy \
