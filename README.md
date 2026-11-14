@@ -47,12 +47,17 @@ Run the 80/20 telecom experiment with seed 42. The trainer evaluates the
 final checkpoint on the held-out test users automatically.
 
 ```bash
-python -m dabm.train_dabm_net \
-  --temporal-path dataset/calendar_temporal_tensor.npy \
-  --metadata-path dataset/calendar_metadata.npz \
-  --protocol train80 --seed 42 --split-seed 42 \
-  --target-training-instances 12000 --test-time-views 3 \
-  --device cuda --output-dir runs/seed_42
+#python -m dabm.train_dabm_net \
+#  --temporal-path dataset/calendar_temporal_tensor.npy \
+#  --metadata-path dataset/calendar_metadata.npz \
+#  --protocol train80 --seed 42 --split-seed 42 \
+#  --target-training-instances 12000 --test-time-views 3 \
+#  --device cuda --output-dir runs/seed_42
+
+python train_dabm_net.py \
+  --protocol train80 \
+  --epochs 500 \
+  --batch-size 16 \
 ```
 
 The default training schedule is 40 epochs. Use `--device cpu` on a CPU-only
