@@ -13,7 +13,7 @@ DTTI-Net adaptively combines patterns across consecutive hours and across days
 at the same hour, along with the discrepancy between the two representations,
 to estimate each user's fraud probability.
 
-The datasets and codebook are available in the
+The datasets are available in the
 [dataset release](https://github.com/codeatong/dabm/releases/tag/data-v1.0).
 
 ## Running the code
